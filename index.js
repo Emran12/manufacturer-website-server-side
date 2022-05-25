@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const { MongoClient, ServerApiVersion } = require("mongodb");
 const cors = require("cors");
+const res = require("express/lib/response");
 require("dotenv").config();
 const port = process.env.PORT || 5000;
 
@@ -15,6 +16,23 @@ const client = new MongoClient(uri, {
   useUnifiedTopology: true,
   serverApi: ServerApiVersion.v1,
 });
+
+async function run() {
+  try {
+    await client.connect();
+    const accessoryCollection = client
+      .db("computer-accessories")
+      .collection("accessories");
+    app.get("/accessories", async (req, res) => {
+      const query = {};
+      const cursor = accessoryCollection.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+  } finally {
+  }
+}
+run().catch(console.dir());
 
 app.get("/", (req, res) => {
   res.send("computer accessories!");
