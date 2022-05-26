@@ -23,6 +23,10 @@ async function run() {
     const accessoryCollection = client
       .db("computer-accessories")
       .collection("accessories");
+    const orderCollection = client
+      .db("computer-accessories")
+      .collection("orders");
+
     app.get("/accessories", async (req, res) => {
       const query = {};
       const cursor = accessoryCollection.find(query);
@@ -35,6 +39,13 @@ async function run() {
       const query = { _id: ObjectId(id) };
       const result = await accessoryCollection.findOne(query);
       res.send(result);
+    });
+
+    app.post("/order", async (req, res) => {
+      const order = req.body;
+      console.log("ordre is ", order);
+      const result = await orderCollection.insertOne(order);
+      console.log(`A document was inserted with id ${result.insertedId}`);
     });
   } finally {
   }
