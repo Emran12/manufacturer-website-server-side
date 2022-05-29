@@ -51,6 +51,23 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/orders", async (req, res) => {
+      const query = {};
+      const cursor = orderCollection.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    app.get("/orders/:email", async (req, res) => {
+      const email = req.params.email;
+      console.log(email);
+      const query = { buyer: email };
+      const cursor = orderCollection.find(query);
+      const result = await cursor.toArray();
+      console.log(result);
+      res.send(result);
+    });
+
     app.post("/order", async (req, res) => {
       const order = req.body;
       const result = await orderCollection.insertOne(order);
