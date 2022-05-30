@@ -88,7 +88,7 @@ async function run() {
       const id = req.params.id;
       console.log(id);
       const query = { _id: ObjectId(id) };
-      const result = await orderCollection.findOne(query);
+      const result = await orderCollection.find(query);
       console.log(result);
       res.send(result);
     });
