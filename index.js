@@ -113,6 +113,24 @@ async function run() {
       );
       res.send(result);
     });
+    app.put("/users/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { email: email };
+      const data = req.body;
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          displayName: data.displayName,
+          phoneNumber: data.phoneNumber,
+          address: data.address,
+        },
+      };
+      const result = await userCollection.updateMany(query, updateDoc, options);
+      console.log(
+        `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`
+      );
+      res.send(result);
+    });
 
     app.delete("/orders/:id", async (req, res) => {
       const id = req.params.id;
