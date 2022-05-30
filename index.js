@@ -29,10 +29,19 @@ async function run() {
     const reviewCollection = client
       .db("computer-accessories")
       .collection("reviews");
+    const userCollection = client
+      .db("computer-accessories")
+      .collection("users");
 
     app.get("/accessories", async (req, res) => {
       const query = {};
       const cursor = accessoryCollection.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+    app.get("/users", async (req, res) => {
+      const query = {};
+      const cursor = userCollection.find(query);
       const result = await cursor.toArray();
       res.send(result);
     });
@@ -41,6 +50,13 @@ async function run() {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
       const result = await accessoryCollection.findOne(query);
+      res.send(result);
+    });
+
+    app.get("/users/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { email: email };
+      const result = await userCollection.findOne(query);
       res.send(result);
     });
 
